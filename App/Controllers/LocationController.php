@@ -4,16 +4,8 @@ namespace App\Controllers;
 
 use App\Plugins\Http\Response as Status;
 use App\Plugins\Http\Exceptions;
-use App\Plugins\Db\Db;
-use App\Plugins\Db\Connection\Mysql;
 
 class LocationController extends BaseController {
-
-    // /**
-    //  * this property contains the database instance
-    //  * @var Db
-    //  */
-    // private DB $db;
 
      public function __construct()
     {
@@ -36,21 +28,21 @@ class LocationController extends BaseController {
      * @return void
      */
     public function create() {
-        if($_SERVER['REQUEST_METHOD'] != 'POST'){
-            throw new Exceptions\BadRequest('Only POST method is allowed');
-        }
 
-        // print_r($_POST);
-        // die();
+        // check request method
+        if($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exceptions\BadRequest('Only POST method is allowed');
 
-        $_POST = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+        // sanitize input
+        $sanitized_data = array_map(function($value) {
+            return $this->sanitize($value);
+        }, $_POST);
 
         $data = [
-            'city' => trim($_POST['city']),
-            'address' => trim($_POST['address']),
-            'zip_code' => trim($_POST['zip_code']),
-            'country_code' => trim($_POST['country_code']),
-            'phone_number' => trim($_POST['phone_number']),
+            'city' => trim($sanitized_data['city']),
+            'address' => trim($sanitized_data['address']),
+            'zip_code' => trim($sanitized_data['zip_code']),
+            'country_code' => trim($sanitized_data['country_code']),
+            'phone_number' => trim($sanitized_data['phone_number']),
         ];
 
         // validation data
@@ -62,15 +54,6 @@ class LocationController extends BaseController {
         }
         if(!empty($errors)) throw new Exceptions\BadRequest($errors);
 
-        // sanitize input
-        // foreach($data as $key => $value){
-        // }
-
-        // foreach($_POST as $key => $value){
-        //     echo $value . '<br>';
-        // }
-        // die();
-
         $query = 'INSERT INTO locations (city, address, zip_code, country_code, phone_number) VALUES(:city, :address, :zip_code, :country_code, :phone_number)';
 
         $bind = [
@@ -81,11 +64,9 @@ class LocationController extends BaseController {
             ':phone_number' => $data['phone_number'],
         ];
 
-
-        // print_r($this->db);
-        // die();
         if($this->db->executeQuery($query, $bind)) {
-            (new Status\Created(['message' => 'Location created successfully']))->send();
+            (new Status\Created($data))->send();
+            exit();
         } else {
             throw new Exceptions\InternalServerError('Something went wrong, please try again later');
         }
