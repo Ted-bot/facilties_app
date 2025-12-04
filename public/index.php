@@ -16,6 +16,7 @@ require_once '../config/services.php';
 // Router
 $router = require_once '../routes/router.php';
 
+
 // Run application through router:
 try {
     $router->run();
