@@ -150,8 +150,11 @@ class FacilityController extends BaseController {
         if($_SERVER['REQUEST_METHOD'] != 'DELETE') throw new Exceptions\BadRequest('Only DELETE method is allowed');
 
         try {
-            $this->db->executeQuery('DELETE FROM facilities WHERE id = :id ', [':id' => $id]);
-            (new Status\Ok(['message' => 'Facility deleted successfully']))->send();
+            $this->db->executeQuery('DELETE facilities, tags, facilities_tags FROM facilities
+            LEFT JOIN facilities_tags ON facilities_tags.facility_tag_id = facilities.tag_id
+            LEFT JOIN tags ON facilities_tags.tag_id = tags.id
+            WHERE facilities.id = :id', [':id' => $id]);
+            (new Status\Ok(['message' => 'Facility: ' . $id . ' deleted successfully']))->send();
             exit();
         } catch (\Exception $e) {
             (new Status\InternalServerError($e->getMessage()))->send();
