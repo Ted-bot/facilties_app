@@ -9,12 +9,6 @@ use App\Plugins\Db\Db;
 class FacilityController extends BaseController {
 
     /**
-     * this property contains the database instance
-     * @var Db
-     */
-    private Db $db;
-
-    /**
      * Controller function used to test whether the project was set up properly.
      * @return void
      */
@@ -28,27 +22,53 @@ class FacilityController extends BaseController {
      * Controler function to create a row in the database table with user input
      */
     public function create() {
-        if($_SERVER['REQUEST_METHOD'] != 'POST'){
-            throw new Exceptions\BadRequest('Only POST method is allowed');
-        }
+        if($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exceptions\BadRequest('Only POST method is allowed');
 
-        // Sanitize POST data
-        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        // sanitize input
+        $sanitized_data = array_map(function($value) {
+            return $this->sanitize($value);
+        }, $_POST);
 
         $data = [
-            'name' => trim($_POST['name']),
+            'name' => trim($sanitized_data['name']),
+            'location_id' => trim($sanitized_data['location_id']),
+            'tag_id' => trim($sanitized_data['tag_id']),
         ];
 
         // validation data
         $errors = [];
         foreach($data as $key => $value){
-            if(empty($value) || $value == ''){
-                $errors[$key] = 'please enter ' . $key . '<br>';
+            if($key == 'tag_id' && $value == ''){ 
+                $data['tag_id'] = null;
+                continue;
+            };
+
+            if($key != 'tag_id' && empty($value)){
+                $errors[$key] = 'please enter ' . $key;
             }            
         }
-        if(!empty($errors)) throw new Exceptions\BadRequest($errors);
+        if(!empty($errors)){
+            (new Status\BadRequest($errors))->send();
+            exit();
+        };
 
-        // $this->db->executeQuery($query, $bind);
+        $query = 'INSERT INTO facilities (name, location_id, tag_id) VALUES(:name, :location_id, :tag_id)';
+
+        $bind = [
+            ':name' => $data['name'],
+            ':location_id' => $data['location_id'],
+            ':tag_id' => $data['tag_id']
+        ];
+
+        try {
+            if($this->db->executeQuery($query, $bind)) {
+                (new Status\Created($data))->send();
+                exit();
+            } 
+        } catch (\Exception $e) {
+            (new Status\InternalServerError($e->getMessage()))->send();
+            exit();
+        }
     }
 
 }

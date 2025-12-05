@@ -7,12 +7,6 @@ use App\Plugins\Http\Exceptions;
 
 class LocationController extends BaseController {
 
-     public function __construct()
-    {
-        Global $di;
-        $this->db = $di->getShared('db');
-    }
-
     /**
      * Controller function used to test whether the project was set up properly.
      * @return void
@@ -48,8 +42,8 @@ class LocationController extends BaseController {
         // validation data
         $errors = [];
         foreach($data as $key => $value){
-            if(empty($value) || $value == ''){
-                $errors[$key] = 'please enter ' . $key . ' ';
+            if(empty($value)){
+                $errors[$key] = 'please enter ' . $key;
             }            
         }
         if(!empty($errors)) throw new Exceptions\BadRequest($errors);
@@ -64,12 +58,14 @@ class LocationController extends BaseController {
             ':phone_number' => $data['phone_number'],
         ];
 
-        if($this->db->executeQuery($query, $bind)) {
-            (new Status\Created($data))->send();
+        try {
+            if($this->db->executeQuery($query, $bind)) {
+                (new Status\Created($data))->send();
+                exit();
+            }
+        } catch (\Exception $e) {
+            (new Status\InternalServerError($e->getMessage()))->send();
             exit();
-        } else {
-            throw new Exceptions\InternalServerError('Something went wrong, please try again later');
         }
     }
-
 }
