@@ -72,16 +72,31 @@ class FacilityController extends BaseController {
         }
     }
 
+    public function getOneFacility($id) {
+        try {
+            $this->db->executeQuery('SELECT * FROM facilities WHERE id = :id', [':id' => $id]);
+             $stmt = $this->db->getStatement();
+             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            (new Status\Ok($result))->send();
+            exit();
+        } catch (\Exception $e) {
+            (new Status\InternalServerError($e->getMessage()))->send();
+            exit();
+        }
+    }
+
     public function getAllFacilities() {
         try {
-            $this->db->executeQuery('SELECT facilities.id, facilities.location_id, facilities.created, facilities_tags.tag_id, facilities_tags.facility_tag_id, facilities.name as facility_name, tags.name as tag_name, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
-                FROM facilities 
+            $this->db->executeQuery('SELECT facilities.id AS id,facilities.name as facility_name,  facilities_tags.facility_tag_id, facilities.location_id, facilities.created, GROUP_CONCAT(facilities_tags.tag_id) AS tag_ids, GROUP_CONCAT(tags.name) as tag_names, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
+                FROM facilities
                 LEFT JOIN facilities_tags ON facilities.tag_id = facilities_tags.facility_tag_id
                 LEFT JOIN tags ON facilities_tags.tag_id = tags.id
                 LEFT JOIN locations ON facilities.location_id = locations.id
+            GROUP BY facilities.id, facilities_tags.facility_tag_id
+            ORDER BY facilities.id ASC
             ');
              $stmt = $this->db->getStatement();
-             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             (new Status\Ok($result))->send();
             exit();
         } catch (\Exception $e) {
