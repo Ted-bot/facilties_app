@@ -1,0 +1,619 @@
+{
+	"info": {
+		"_postman_id": "b8b11f30-694b-4d1d-ad79-a1c544fa642f",
+		"name": "DTT Back end assessment – Catering API",
+		"description": "The Postman collection for the DTT backend assessment test: Catering API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14537514"
+	},
+	"item": [
+		{
+			"name": "Test API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"test"
+					]
+				},
+				"description": "API call used to test local development environment and database connection.\n\nShould print _'Hello World!'_ if all is OK."
+			},
+			"response": []
+		},
+		{
+			"name": "Create facility (TODO)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/facility",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"facility"
+					]
+				},
+				"description": "Creates a facility..."
+			},
+			"response": []
+		},
+		{
+			"name": "1. create location (first step before creating facility)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "city",
+							"value": "<a href=\"#\">Hallo</a>",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Nieuwezijds Voorburgwal 147",
+							"type": "text"
+						},
+						{
+							"key": "zip_code",
+							"value": "1102AA",
+							"type": "text"
+						},
+						{
+							"key": "country_code",
+							"value": "031",
+							"type": "text"
+						},
+						{
+							"key": "phone_number",
+							"value": "0612345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/facility/location/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"facility",
+						"location",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.2 create 2nd location (after finishing 1st location, facility and tag)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "city",
+							"value": "<a href=\"#\">Amsterdam</a>",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Postjesweg",
+							"type": "text"
+						},
+						{
+							"key": "zip_code",
+							"value": "1055AA",
+							"type": "text"
+						},
+						{
+							"key": "country_code",
+							"value": "031",
+							"type": "text"
+						},
+						{
+							"key": "phone_number",
+							"value": "0612345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/facility/location/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"facility",
+						"location",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. create facility (after creating location)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "<a href=\"#\">Koninklijk paleis Amsterdam</a>",
+							"type": "text"
+						},
+						{
+							"key": "location_id",
+							"value": "27",
+							"description": "ta",
+							"type": "text"
+						},
+						{
+							"key": "tag_id",
+							"value": "11",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/facilities/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"facilities",
+						"create"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.2 create facility (use after creating 1st)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "<a href=\"#\">Ajax</a>",
+							"type": "text"
+						},
+						{
+							"key": "location_id",
+							"value": "27",
+							"description": "ta",
+							"type": "text"
+						},
+						{
+							"key": "tag_id",
+							"value": "11",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/facilities/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"facilities",
+						"create"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. create tags (after creating facility)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "<a href=\"#\">Cheese Toastie</a>",
+							"type": "text"
+						},
+						{
+							"key": "location_id",
+							"value": "27",
+							"description": "ta",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tag_id",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/tag/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"tag",
+						"create"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. create tag relation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "<a href=\"#\">Cheese Toastie</a>",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "facility_tag_id",
+							"value": "27",
+							"description": "ta",
+							"type": "text"
+						},
+						{
+							"key": "tag_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/tags/relation/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"tags",
+						"relation",
+						"create"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. get all facilities",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "<a href=\"#\">Cheese Toastie</a>",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "facility_tag_id",
+							"value": "27",
+							"description": "ta",
+							"type": "text"
+						},
+						{
+							"key": "tag_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/facilities",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"facilities"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. get one facility",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "<a href=\"#\">Cheese Toastie</a>",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "facility_tag_id",
+							"value": "27",
+							"description": "ta",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tag_id",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/facilities/11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"facilities",
+						"11"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. update one facility",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "facility_id",
+							"value": "11",
+							"description": "get correct facility to change",
+							"type": "text"
+						},
+						{
+							"key": "facility_name",
+							"value": "Koffie",
+							"description": "Change facility name",
+							"type": "text"
+						},
+						{
+							"key": "tag_id",
+							"value": "2",
+							"description": "get correct tag  to change",
+							"type": "text"
+						},
+						{
+							"key": "tag_name",
+							"value": "Kofifie",
+							"description": "Change name: Hamburger to Koffie",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/facilities/update/11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"facilities",
+						"update",
+						"11"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. delete one facility",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "facility_id",
+							"value": "11",
+							"description": "get correct facility to change",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "facility_name",
+							"value": "Koffie",
+							"description": "Change facility name",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tag_id",
+							"value": "2",
+							"description": "get correct tag  to change",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tag_name",
+							"value": "Kofifie",
+							"description": "Change name: Hamburger to Koffie",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/web_backend_test_catering_api/facilities/delete/11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"web_backend_test_catering_api",
+						"facilities",
+						"delete",
+						"11"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search through facilities",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost/web_backend_test_catering_api",
+			"type": "string"
+		}
+	]
+}
