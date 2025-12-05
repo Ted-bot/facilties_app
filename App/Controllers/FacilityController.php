@@ -74,7 +74,14 @@ class FacilityController extends BaseController {
 
     public function getOneFacility($id) {
         try {
-            $this->db->executeQuery('SELECT * FROM facilities WHERE id = :id', [':id' => $id]);
+            // $this->db->executeQuery('SELECT * FROM facilities WHERE id = :id ', [':id' => $id]);
+            $this->db->executeQuery('SELECT facilities.id AS id,facilities.name as facility_name,  facilities_tags.facility_tag_id, facilities.location_id, facilities.created, GROUP_CONCAT(facilities_tags.tag_id), GROUP_CONCAT(tags.name) as tag_names, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
+                FROM facilities 
+                LEFT JOIN facilities_tags ON facilities.tag_id = facilities_tags.facility_tag_id
+                LEFT JOIN tags ON facilities_tags.tag_id = tags.id
+                LEFT JOIN locations ON facilities.location_id = locations.id
+                WHERE facilities.id = :id
+            GROUP BY facilities.id, facilities_tags.facility_tag_id', [':id' => $id]);
              $stmt = $this->db->getStatement();
              $result = $stmt->fetch(PDO::FETCH_ASSOC);
             (new Status\Ok($result))->send();
