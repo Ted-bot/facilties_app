@@ -9,7 +9,9 @@ use App\Plugins\Db\Db;
 class TagController extends BaseController {
 
     /**
-     * Controllr function to create a row in the database table with user input
+     * this method creates a row in the database table Tag with user input
+     * @throws Exceptions\BadRequest
+     * @return void
      */
     public function create() {
         if($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exceptions\BadRequest('Only POST method is allowed');

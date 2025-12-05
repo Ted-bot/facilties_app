@@ -103,6 +103,13 @@ class FacilityController extends BaseController {
         }
     }
 
+    /**
+     * update one facility with given facility_id and tag_id params e.g. /facilities/update/1/2
+     * @param mixed $facility_id
+     * @param mixed $tag_id
+     * @throws Exceptions\BadRequest
+     * @return never
+     */
     public function updateOneFacility($facility_id, $tag_id = null) {
         if($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exceptions\BadRequest('Only POST method is allowed');
 
@@ -146,6 +153,12 @@ class FacilityController extends BaseController {
         }
     }
 
+    /**
+     * this method deletes rows related to specified facility
+     * @param mixed $id
+     * @throws Exceptions\BadRequest
+     * @return never
+     */
     public function deleteOneFacility($id) {
         if($_SERVER['REQUEST_METHOD'] != 'DELETE') throw new Exceptions\BadRequest('Only DELETE method is allowed');
 
