@@ -44,6 +44,10 @@ class TagController extends BaseController {
         }
     }
 
+    /**
+     * this method creates a relation between tags and facilities in the database
+     * @return void
+     */
     public function setTagAndFacililityRelation() {
 
         $sanitized_data = [];

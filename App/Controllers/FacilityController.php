@@ -19,8 +19,11 @@ class FacilityController extends BaseController {
         (new Status\Ok(['message' => 'testing facility controller!']))->send();
     }
 
+
     /**
-     * Controller function to create a row in the database table with user input
+     * this method creates a row in the database table with user input
+     * @throws Exceptions\BadRequest
+     * @return void
      */
     public function create() {
         if($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exceptions\BadRequest('Only POST method is allowed');
@@ -72,10 +75,16 @@ class FacilityController extends BaseController {
         }
     }
 
+    /**
+     * getOneFacility - MUST have a (int) param for query input e.g. localhost/facility/1
+     * this method gets one facility from the database with related tags and location info
+     * @param mixed $id
+     * @return never
+     */
     public function getOneFacility($id) {
         try {
             // $this->db->executeQuery('SELECT * FROM facilities WHERE id = :id ', [':id' => $id]);
-            $this->db->executeQuery('SELECT facilities.id AS id,facilities.name as facility_name,  facilities_tags.facility_tag_id, facilities.location_id, facilities.created, GROUP_CONCAT(facilities_tags.tag_id), GROUP_CONCAT(tags.name) as tag_names, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
+            $this->db->executeQuery('SELECT facilities.id AS id,facilities.name as facility_name,  facilities_tags.facility_tag_id, facilities.location_id, facilities.created, GROUP_CONCAT(facilities_tags.tag_id) AS tag_ids, GROUP_CONCAT(tags.name) as tag_names, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
                 FROM facilities 
                 LEFT JOIN facilities_tags ON facilities.tag_id = facilities_tags.facility_tag_id
                 LEFT JOIN tags ON facilities_tags.tag_id = tags.id
@@ -92,6 +101,10 @@ class FacilityController extends BaseController {
         }
     }
 
+    /**
+     * getAllFacilities - get all facilities from the database with related tags and location info
+     * @return never
+     */
     public function getAllFacilities() {
         try {
             $this->db->executeQuery('SELECT facilities.id AS id,facilities.name as facility_name,  facilities_tags.facility_tag_id, facilities.location_id, facilities.created, GROUP_CONCAT(facilities_tags.tag_id) AS tag_ids, GROUP_CONCAT(tags.name) as tag_names, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
