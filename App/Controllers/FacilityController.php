@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Plugins\Http\Response as Status;
 use App\Plugins\Http\Exceptions;
+use PDO;
 use App\Plugins\Db\Db;
 
 class FacilityController extends BaseController {
@@ -65,6 +66,19 @@ class FacilityController extends BaseController {
                 (new Status\Created($data))->send();
                 exit();
             } 
+        } catch (\Exception $e) {
+            (new Status\InternalServerError($e->getMessage()))->send();
+            exit();
+        }
+    }
+
+    public function getAllFacilities() {
+        try {
+            $this->db->executeQuery('SELECT * FROM facilities');
+             $stmt = $this->db->getStatement();
+             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            (new Status\Ok($result))->send();
+            exit();
         } catch (\Exception $e) {
             (new Status\InternalServerError($e->getMessage()))->send();
             exit();
