@@ -4,6 +4,7 @@
 
 // Define routes here
 $router->get('/facility/test', App\Controllers\FacilityController::class . '@test');
+
 $router->post('/tags/create', App\Controllers\TagController::class . '@create');
 $router->post('/tags/relation/create', App\Controllers\TagController::class . '@setTagAndFacililityRelation');
 
@@ -14,6 +15,8 @@ $router->get('/facilities', App\Controllers\FacilityController::class . '@getAll
 $router->get('/facilities/(\d+)', App\Controllers\FacilityController::class . '@getOneFacility');
 $router->post('/facilities/update/(\d+)/(\d+)', App\Controllers\FacilityController::class . '@updateOneFacility');
 $router->delete('/facilities/delete/(\d+)', App\Controllers\FacilityController::class . '@deleteOneFacility');
+
+$router->get('/facilities/search/(\w+)', App\Controllers\FacilityController::class . '@searchForFacilities');
 
 $router->get('/test', App\Controllers\IndexController::class . '@test');
 $router->get('/', App\Controllers\IndexController::class . '@test');

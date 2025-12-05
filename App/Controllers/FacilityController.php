@@ -163,6 +163,33 @@ class FacilityController extends BaseController {
     }
 
     /**
+     * This method searches for facilities based on a search term
+     * @param mixed $search
+     * @return void
+     */
+    public function searchForFacilities($search){
+        if($_SERVER['REQUEST_METHOD'] != 'GET') throw new Exceptions\BadRequest('Only GET method is allowed');
+
+        try {
+            $this->db->executeQuery('SELECT facilities.id, facilities.name, GROUP_CONCAT(tags.name) AS tag_names, locations.city, locations.address, locations.phone_number, locations.country_code FROM facilities
+            LEFT JOIN facilities_tags ON facilities_tags.facility_tag_id = facilities.tag_id
+            LEFT JOIN tags ON facilities_tags.tag_id = tags.id
+            LEFT JOIN locations ON facilities.location_id = locations.id
+            WHERE facilities.name LIKE :search OR tags.name LIKE :search OR locations.city LIKE :search
+            GROUP BY facilities.id, facilities_tags.facility_tag_id
+            ORDER BY facilities.id ASC
+            ', [':search' => '%' . $search . '%']);
+             $stmt = $this->db->getStatement();
+             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            (new Status\Ok($result))->send();
+            exit();
+        } catch (\Exception $e) {
+            (new Status\InternalServerError($e->getMessage()))->send();
+            exit();
+        }
+    }
+
+    /**
      * getAllFacilities - get all facilities from the database with related tags and location info
      * @return never
      */
