@@ -18,7 +18,7 @@ class LocationController extends BaseController {
     }
 
     /**
-     * Controler function to create a row in the database table with user input
+     * Controller function to create a row in the database table with user input
      * @return void
      */
     public function create() {

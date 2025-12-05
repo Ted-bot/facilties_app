@@ -19,7 +19,7 @@ class FacilityController extends BaseController {
     }
 
     /**
-     * Controler function to create a row in the database table with user input
+     * Controller function to create a row in the database table with user input
      */
     public function create() {
         if($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exceptions\BadRequest('Only POST method is allowed');
