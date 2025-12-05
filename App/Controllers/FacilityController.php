@@ -106,8 +106,6 @@ class FacilityController extends BaseController {
     public function updateOneFacility($facility_id, $tag_id = null) {
         if($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exceptions\BadRequest('Only POST method is allowed');
 
-        
-
         // sanitize input
         $sanitized_data = array_map(function($value) {
             return $this->sanitize($value);
@@ -141,6 +139,19 @@ class FacilityController extends BaseController {
              $stmt = $this->db->getStatement();
              $result = $stmt->fetch(PDO::FETCH_ASSOC);
             (new Status\Ok($result))->send();
+            exit();
+        } catch (\Exception $e) {
+            (new Status\InternalServerError($e->getMessage()))->send();
+            exit();
+        }
+    }
+
+    public function deleteOneFacility($id) {
+        if($_SERVER['REQUEST_METHOD'] != 'DELETE') throw new Exceptions\BadRequest('Only DELETE method is allowed');
+
+        try {
+            $this->db->executeQuery('DELETE FROM facilities WHERE id = :id ', [':id' => $id]);
+            (new Status\Ok(['message' => 'Facility deleted successfully']))->send();
             exit();
         } catch (\Exception $e) {
             (new Status\InternalServerError($e->getMessage()))->send();

@@ -13,6 +13,7 @@ $router->post('/facilities/create', App\Controllers\FacilityController::class . 
 $router->get('/facilities', App\Controllers\FacilityController::class . '@getAllFacilities');
 $router->get('/facilities/(\d+)', App\Controllers\FacilityController::class . '@getOneFacility');
 $router->post('/facilities/update/(\d+)/(\d+)', App\Controllers\FacilityController::class . '@updateOneFacility');
+$router->delete('/facilities/delete/(\d+)', App\Controllers\FacilityController::class . '@deleteOneFacility');
 
 $router->get('/test', App\Controllers\IndexController::class . '@test');
 $router->get('/', App\Controllers\IndexController::class . '@test');
