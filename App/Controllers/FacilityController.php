@@ -82,6 +82,8 @@ class FacilityController extends BaseController {
      * @return never
      */
     public function getOneFacility($id) {
+        if($_SERVER['REQUEST_METHOD'] != 'GET') throw new Exceptions\BadRequest('Only GET method is allowed');
+
         try {
             // $this->db->executeQuery('SELECT * FROM facilities WHERE id = :id ', [':id' => $id]);
             $this->db->executeQuery('SELECT facilities.id AS id,facilities.name as facility_name,  facilities_tags.facility_tag_id, facilities.location_id, facilities.created, GROUP_CONCAT(facilities_tags.tag_id) AS tag_ids, GROUP_CONCAT(tags.name) as tag_names, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
@@ -101,11 +103,58 @@ class FacilityController extends BaseController {
         }
     }
 
+    public function updateOneFacility($facility_id, $tag_id = null) {
+        if($_SERVER['REQUEST_METHOD'] != 'POST') throw new Exceptions\BadRequest('Only POST method is allowed');
+
+        
+
+        // sanitize input
+        $sanitized_data = array_map(function($value) {
+            return $this->sanitize($value);
+        }, $_POST);
+
+        $data = [
+            'facility_name' => trim($sanitized_data['facility_name']),
+            'tag_name' => trim($sanitized_data['tag_name']),
+        ];
+
+        try {
+            $this->db->executeQuery('UPDATE facilities , tags
+                SET
+                    facilities.name = :facility_name,
+                    tags.name = :tag_name
+                WHERE facilities.id = :facility_id AND tags.id = :tag_id;', [
+                ':facility_id' => $facility_id,
+                ':facility_name' => $data['facility_name'],
+                ':tag_id' => $tag_id,
+                ':tag_name' => $data['tag_name'],
+            ]);
+
+            $this->db->executeQuery('SELECT facilities.id AS id,facilities.name as facility_name,  facilities_tags.facility_tag_id, facilities.location_id, facilities.created, GROUP_CONCAT(facilities_tags.tag_id) AS tag_ids, GROUP_CONCAT(tags.name) as tag_names, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
+                FROM facilities 
+                LEFT JOIN facilities_tags ON facilities.tag_id = facilities_tags.facility_tag_id
+                LEFT JOIN tags ON facilities_tags.tag_id = tags.id
+                LEFT JOIN locations ON facilities.location_id = locations.id
+                WHERE facilities.id = :id
+            GROUP BY facilities.id, facilities_tags.facility_tag_id', [':id' => $facility_id]);
+
+             $stmt = $this->db->getStatement();
+             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            (new Status\Ok($result))->send();
+            exit();
+        } catch (\Exception $e) {
+            (new Status\InternalServerError($e->getMessage()))->send();
+            exit();
+        }
+    }
+
     /**
      * getAllFacilities - get all facilities from the database with related tags and location info
      * @return never
      */
     public function getAllFacilities() {
+        if($_SERVER['REQUEST_METHOD'] != 'GET') throw new Exceptions\BadRequest('Only GET method is allowed');
+
         try {
             $this->db->executeQuery('SELECT facilities.id AS id,facilities.name as facility_name,  facilities_tags.facility_tag_id, facilities.location_id, facilities.created, GROUP_CONCAT(facilities_tags.tag_id) AS tag_ids, GROUP_CONCAT(tags.name) as tag_names, locations.city, locations.address, locations.zip_code, locations.country_code, locations.phone_number
                 FROM facilities
